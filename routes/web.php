@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\filmeController;
+use App\Http\Controllers\MovieController;
 use App\Models\Categorias;
 use App\Models\Genero;
 use App\Models\filme;
@@ -56,10 +56,10 @@ Route::match(['get', 'post'], '/', function (Request $request) {
     // Carregar os gêneros para cada filme encontrado
     $movies->load('genero');
 
-    $movies = Movie::select('movie.id', 'movie.nome', DB::raw('GROUP_CONCAT(genero.nome SEPARATOR ", ") AS generos'))
-        ->join('genero', 'movie.id', '=', 'genero.id')
-        ->join('genero as genero2', 'genero.id', '=', 'genero2.id')
-        ->groupBy('movie.id', 'movie.nome')
+    $movies = Movie::select('movies.id', 'movies.nome', DB::raw('GROUP_CONCAT(categorias.name SEPARATOR ", ") AS categorias'))
+        ->join('categorias', 'movies.id', '=', 'categorias.id')
+        ->join('categorias as categorias2', 'categorias.id', '=', 'categorias2.id')
+        ->groupBy('movies.id', 'movies.nome')
         ->get();
 
 
@@ -70,7 +70,7 @@ Route::match(['get', 'post'], '/', function (Request $request) {
     return view('welcome', compact('movies', 'generos', 'generoSelecionado'))->with('movies', $movies);
 })->name('home');
 
-Route::get('/genero/{nome}', [filmeController::class, 'moviesPorGenero'])->name('movies.genero');
+Route::get('/genero/{name}', [MovieController::class, 'moviesPorGenero'])->name('movies.genero');
 
 Route::get('/login', [UserController::class, 'login'])->name('login');
 Route::post('/login', [UserController::class, 'login'])->name('login');
@@ -80,28 +80,28 @@ Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 Route::get('/register', [UserController::class, 'register'])->name('register');
 Route::post('/register', [UserController::class, 'regSuccess'])->name('register.addSuccess');
 
-Route::get('/new-movie', [filmeController::class, 'movie'])->name('movie')->middleware('auth');
-Route::post('/new-movie', [filmeController::class, 'newmovie'])->name('movie.newmovie');
+Route::get('/new-movie', [MovieController::class, 'movie'])->name('movie')->middleware('auth');
+Route::post('/new-movie', [MovieController::class, 'newmovie'])->name('movie.newmovie');
 
-Route::get('/new-movie/movie/view', [filmeController::class, 'searchmovie'])->name('movie.view')->middleware('auth');
-Route::post('/new-movie/movie/view', [filmeController::class, 'searchmovie'])->name('movie.viewTable');
+Route::get('/new-movie/movie/view', [MovieController::class, 'searchmovie'])->name('movie.view')->middleware('auth');
+Route::post('/new-movie/movie/view', [MovieController::class, 'searchmovie'])->name('movie.viewTable');
 
-Route::get('/new-movie/movie/movie-page/{movies}', [filmeController::class, 'moviePage'])->name('movie.moviePage');
+Route::get('/new-movie/movie/movie-page/{movies}', [MovieController::class, 'moviePage'])->name('movie.moviePage');
 
-Route::get('/new-movie/movie/edit/{movies}', [filmeController::class, 'editmovie'])->name('movie.edit')->middleware('auth');
-Route::post('/new-movie/movie/edit/{movies}', [filmeController::class, 'editSavemovie'])->name('movie.editSave');
+Route::get('/new-movie/movie/edit/{movies}', [MovieController::class, 'editmovie'])->name('movie.edit')->middleware('auth');
+Route::post('/new-movie/movie/edit/{movies}', [MovieController::class, 'editSavemovie'])->name('movie.editSave');
 
-Route::get('/new-movie/movie/delete/{movie}', [filmeController::class, 'deletemovie'])->name('movie.delete')->middleware('auth');
-Route::delete('/new-movie/movie/delete/{movie}', [filmeController::class, 'deleteConfirmmovie'])->name('movie.deleteConfirm')->middleware('auth');
+Route::get('/new-movie/movie/delete/{movie}', [MovieController::class, 'deletemovie'])->name('movie.delete')->middleware('auth');
+Route::delete('/new-movie/movie/delete/{movie}', [MovieController::class, 'deleteConfirmmovie'])->name('movie.deleteConfirm')->middleware('auth');
 
-Route::get('/new-movie/genre', [filmeController::class, 'genre'])->name('genre')->middleware('auth');
-Route::post('/new-movie/genre', [filmeController::class, 'newGenre'])->name('genre.newGenre');
+Route::get('/new-movie/genre', [MovieController::class, 'genre'])->name('genre')->middleware('auth');
+Route::post('/new-movie/genre', [MovieController::class, 'newGenre'])->name('genre.newGenre');
 
-Route::get('/new-movie/genre/new', [filmeController::class, 'search'])->name('genre.view')->middleware('auth');
-Route::post('/new-movie/genre/new', [filmeController::class, 'search'])->name('genre.viewTable');
+Route::get('/new-movie/genre/new', [MovieController::class, 'search'])->name('genre.view')->middleware('auth');
+Route::post('/new-movie/genre/new', [MovieController::class, 'search'])->name('genre.viewTable');
 
-Route::get('/new-movie/genre/edit/{genero}', [filmeController::class, 'edit'])->name('genre.edit')->middleware('auth');
-Route::post('/new-movie/genre/edit/{genero}', [filmeController::class, 'editSave'])->name('genre.editSave');
+Route::get('/new-movie/genre/edit/{genero}', [MovieController::class, 'edit'])->name('genre.edit')->middleware('auth');
+Route::post('/new-movie/genre/edit/{genero}', [MovieController::class, 'editSave'])->name('genre.editSave');
 
-Route::get('/new-movie/genre/delete/{genero}', [filmeController::class, 'delete'])->name('genre.delete')->middleware('auth');
-Route::delete('/new-movie/genre/delete/{genero}', [filmeController::class, 'deleteConfirm'])->name('genre.deleteConfirm');
+Route::get('/new-movie/genre/delete/{genero}', [MovieController::class, 'delete'])->name('genre.delete')->middleware('auth');
+Route::delete('/new-movie/genre/delete/{genero}', [MovieController::class, 'deleteConfirm'])->name('genre.deleteConfirm');

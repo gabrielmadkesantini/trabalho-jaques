@@ -24,7 +24,7 @@ class UserController extends Controller
 
     public function login()
     {
-        return view('login');
+        return view('user.login');
     }
 
     public function confirmLogin(Request $request)
@@ -56,11 +56,10 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function register()
     {
-        return view("create_users");
+        return view('user.register');
     }
-
     /**
      * Store a newly created resource in storage.
      */

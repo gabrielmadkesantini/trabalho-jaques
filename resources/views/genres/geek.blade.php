@@ -22,7 +22,7 @@
                         <div class="nav-item dropdown">
                         </div>
                         @foreach ($generos as $genero)
-                        <a href="{{ route('movies.genero', ['name' => $genero->name]) }}" style="display: block; margin-bottom: 20px; border-bottom: 1px solid #ccc;">{{ $genero->name }}</a>
+                        <a href="{{ route('filmes.genero', ['nome' => $genero->nome]) }}" style="display: block; margin-bottom: 20px; border-bottom: 1px solid #ccc;">{{ $genero->nome }}</a>
             @endforeach
                     </div>
                 </nav>
@@ -37,8 +37,9 @@
     <!-- Products Start -->
     <div class="container-fluid pt-5">
     <div class="text-center mb-4">
-        <h2 class="section-title px-5"><span class="px-2">FILMES</span></h2>
-    </div>
+    @if ($generoSelecionado)
+        <h2>{{ $generoSelecionado->nome }}</h2>
+    @endif
     @if ($movies instanceof \Illuminate\Database\Eloquent\Collection && $movies->count() > 0)
     <div class="row px-xl-5 pb-3">
         @foreach ($movies as $movie)
@@ -53,23 +54,12 @@
                     Sem imagem
                     @endif
                 </div>
-                <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                    <h6 class="text-truncate mb-3" style="font-size: 14px; margin-left: 2px;"><a href="{{ route('movie.moviePage', $movie->id) }}">{{ $movie->nome }}</a></h6>
-                    <div class="d-flex"  style="margin-left: 8px;">
 
-                    </div>
-                </div>
-                    </form>
-                </div>
-            </div>
-        </div>
         @endforeach
     <!-- Products End -->
 
 
-    @if ($generoSelecionado)
-        <h2>Gênero selecionado: {{ $generoSelecionado->nome }}</h2>
-    @endif
+
 
     @elseif (is_string($movies) && !empty($movies))
         <p>Nenhum filme encontrado para o gênero: {{ $generoSelecionado->nome }}</p>

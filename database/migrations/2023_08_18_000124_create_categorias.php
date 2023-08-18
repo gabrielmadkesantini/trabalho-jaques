@@ -25,8 +25,8 @@ return new class extends Migration
 
 
         foreach ($generos as $genero) {
-            DB::table('genero')->insert([
-                'nome' => $genero,
+            DB::table('categorias')->insert([
+                'name' => $genero,
             ]);
         }
     }
