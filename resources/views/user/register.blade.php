@@ -15,9 +15,9 @@
             @endforeach
         @endif
 
-        <form action="{{ url()->current() }}" method="POST">
+        <form action="{{ route('register.addSuccess') }}" method="POST">
             @csrf
-            <input type="text" name="nome" placeholder="Nome"> <br>
+            <input type="text" name="name" placeholder="Nome"> <br>
             <input type="email" name="email" placeholder="Email"> <br>
             <input type="password" name="password" placeholder="Senha">
             <br><br>

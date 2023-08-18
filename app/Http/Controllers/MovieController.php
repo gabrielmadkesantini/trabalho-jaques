@@ -21,7 +21,7 @@ class MovieController extends Controller
     public function index()
     {
         $movies = Movie::all();
-        return view("home.view", ["movies" => $movies]);
+        return view("home.view", ["movie" => $movies]);
     }
 
     /**
@@ -29,7 +29,7 @@ class MovieController extends Controller
      */
     public function create()
     {
-        return view("movies.view");
+        return view("movie.view");
     }
 
     /**
@@ -136,12 +136,9 @@ class MovieController extends Controller
                 'required',
                 Rule::unique('filme')->ignore($movies->id),
             ],
-            'pag' => 'required|numeric',
-            'autor' => 'required',
-            'editora' => 'required',
-            'ano' => 'required',
             'sinopse' => 'required',
-            'preco' => 'required',
+            'ano' => 'required',
+            'link' => 'required',
         ];
 
         // Verifica se foi enviada uma nova imagem

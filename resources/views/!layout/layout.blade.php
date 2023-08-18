@@ -51,12 +51,12 @@
 
                 @if (Auth::user())
                 <div style="display: inline-block;">
-            {{ Auth::user()->nome }} <br>
+            {{ Auth::user()->name }} <br>
             <a href="{{ route('logout') }}">Logout</a>
         </div>
 
-            @if (Auth::user() && Auth::user()->isAdmin)
-            <a href="{{ route('movie') }}">Gerenciar filmes</a>
+            @if (Auth::user() && Auth::user()->admin)
+            <br> <a href="{{ route('movie') }}">Gerenciar filmes</a>
         @endif
         @else
 

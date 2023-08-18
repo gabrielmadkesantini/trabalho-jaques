@@ -23,7 +23,7 @@
             @endforeach
         @endif
 
-        <form action="{{ url()->current() }}" method="POST">
+        <form action="{{ route('login.confirm') }}" method="POST">
             @csrf
             <input type="email" name="email" placeholder="Email"> <br>
             <input type="password" name="password" placeholder="Senha">

@@ -30,9 +30,8 @@ class UserController extends Controller
     public function confirmLogin(Request $request)
     {
         $data = $request->validate([
-            "name" => "required|min:3",
             "email" => "required",
-            "password" => "required|min:5"
+            "password" => "required|min:3"
         ]);
 
         $user = User::where('email', $data['email'])->first();
@@ -56,7 +55,7 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function register()
+   public function register()
     {
         return view('user.register');
     }
@@ -68,12 +67,14 @@ class UserController extends Controller
         $user = User::create($request->validate([
             "name" => 'required|min:3',
             "email" => 'required',
-            "password" => Hash::make('required|min:3')
+            "password" =>'required|min:3'
         ]));
+        $user->password = Hash::make($request->password);
+        $user->save();
 
         event(new Registered($user));
 
-        return redirect()->route('home.view')->with('sucesso', 'Conta Criada com sucesso!');
+        return redirect()->route('home')->with('sucesso', 'Conta Criada com sucesso!');
     }
 
 

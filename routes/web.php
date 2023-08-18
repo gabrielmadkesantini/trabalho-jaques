@@ -73,12 +73,12 @@ Route::match(['get', 'post'], '/', function (Request $request) {
 Route::get('/genero/{name}', [MovieController::class, 'moviesPorGenero'])->name('movies.genero');
 
 Route::get('/login', [UserController::class, 'login'])->name('login');
-Route::post('/login', [UserController::class, 'login'])->name('login');
+Route::post('/login', [UserController::class, 'confirmLogin'])->name('login.confirm');
 
 Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 
 Route::get('/register', [UserController::class, 'register'])->name('register');
-Route::post('/register', [UserController::class, 'regSuccess'])->name('register.addSuccess');
+Route::post('/register', [UserController::class, 'store'])->name('register.addSuccess');
 
 Route::get('/new-movie', [MovieController::class, 'movie'])->name('movie')->middleware('auth');
 Route::post('/new-movie', [MovieController::class, 'newmovie'])->name('movie.newmovie');

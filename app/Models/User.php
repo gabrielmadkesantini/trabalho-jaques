@@ -12,10 +12,10 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    protected $fillable = ['nome', 'email', 'password', 'isAdmin'];
+    protected $fillable = ['name', 'email', 'password', 'admin'];
     protected $hidden = ['password'];
 
     protected $casts = [
-        'isAdmin' => 'boolean',
+        'admin' => 'boolean',
     ];
 }
