@@ -18,10 +18,10 @@ class MovieController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function movie()
     {
         $movies = Movie::all();
-        return view("home.view", ["movie" => $movies]);
+        return view("movie.view", ["movies" => $movies]);
     }
 
     /**
