@@ -12,7 +12,7 @@
     <div>{{ session('sucesso') }}</div>
     @endif
 
-    <form class="search-form" action="{{ url()->current() }}" method="POST">
+    <form class="search-form" action="{{ route('movie.searchName') }}" method="POST">
         @csrf
         <input class="search-input" type="text" name="busca" placeholder="Nome do filme">
         <button class="search-button" type="submit">Buscar</button>
@@ -43,7 +43,7 @@
         @endforeach
     </table>
 
-    <a class="back-link" href="{{ route('movie') }}">Voltar</a>
+    <a class="back-link" href="{{ route('home') }}">Voltar</a>
 </div>
 
 </body>

@@ -11,12 +11,11 @@
 @endif
 
 
-
     <div class="container">
         <div class="movie-info">
             <div class="movie-image">
                 @if($movies->imagem)
-                    <img src="{{ asset('storage/' . $movies->imagem) }}" alt="{{ $movies->nome }}" width="100">
+                    <img src="{{ asset('storage\filme\g9XKfGC1JFBJXqTa0dAwZDtQ6MCVocErUHmn80VM.jpg') }}" alt="{{ $movies->nome }}" width="100">
                 @else
                     Sem imagem
                 @endif
@@ -30,8 +29,8 @@
                 </fieldset>
                 <p class="sinopse-spacing">Trailer: {{ $movies->link }}</p>
                 <p>Gênero(s):
-                    @if ($movies->generos->count() > 0)
-                        {{ $movies->generos->pluck('nome')->implode(', ') }}
+                    @if ($movies->categorias->count() > 0)
+                        {{ $movies->categorias->pluck('nome')->implode(', ') }}
                     @else
                         Nenhum gênero associado
                     @endif

@@ -21,8 +21,8 @@
                     <div class="navbar-nav w-100 overflow-hidden" style="height:460px">
                         <div class="nav-item dropdown">
                         </div>
-                        @foreach ($generos as $genero)
-                        <a href="{{ route('movies.genero', ['name' => $genero->name]) }}" style="display: block; margin-bottom: 20px; border-bottom: 1px solid #ccc;">{{ $genero->name }}</a>
+                        @foreach ($categorias as $categoria)
+                        <a href="{{ route('movies.genero', ['name' => $categoria->name]) }}" style="display: block; margin-bottom: 20px; border-bottom: 1px solid #ccc;">{{ $categoria->name }}</a>
             @endforeach
                     </div>
                 </nav>

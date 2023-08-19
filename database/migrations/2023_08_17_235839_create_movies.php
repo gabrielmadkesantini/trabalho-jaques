@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('nome');
             $table->string('sinopse');
-            $table->date('ano');
+            $table->integer('ano');
             $table->string('imagem');
             $table->string('link');
         });

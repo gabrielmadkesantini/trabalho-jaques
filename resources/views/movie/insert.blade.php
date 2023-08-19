@@ -24,26 +24,27 @@
 
         <fieldset style="margin-left: 40%; margin-right: 40%">
             <legend style="text-align: left">Ano:</legend>
-            <input type="date" name="ano"> <br>
+            <input type="number" name="ano" min="1899" max="2023"> <br>
         </fieldset> <br>
+
 
         <div>
             <label for="imagem">Imagem do filme:</label> <br>
             <input type="file" name="imagem">
         </div> <br>
 
-        <label for="generos">Selecione os gêneros:</label> <br>
-        <select name="generos[]" multiple>
-            @foreach ($generos as $genero)
-                <option value="{{ $genero->id }}">{{ $genero->nome }}</option>
+        <label for="categorias">Selecione os gêneros:</label> <br>
+        <select name="categorias[]" multiple>
+            @foreach ($categorias as $categoria)
+                <option value="{{ $categoria->id }}">{{ $categoria->name }}</option>
             @endforeach
         </select>
         <br>
         <input type="submit" value="Adicionar">
     </form>
 
-    Gêneros disponíveis <a href="{{ route('genre.view') }}">aqui</a> <br>
-    filmes disponíveis <a href="{{ route('movie.view') }}">aqui</a> <br>
+    {{-- Gêneros disponíveis <a href="{{ route('genre.view') }}">aqui</a> <br>
+    filmes disponíveis <a href="{{ route('movie.view') }}">aqui</a> <br> --}}
     <a href="{{ route('home') }}">Voltar</a>
 </div>
 

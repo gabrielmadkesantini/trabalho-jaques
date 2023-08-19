@@ -10,6 +10,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Route;
 
 
 
@@ -21,15 +22,18 @@ class MovieController extends Controller
     public function movie()
     {
         $movies = Movie::all();
-        return view("movie.view", ["movies" => $movies]);
+        // dd($movies);
+        return view("movie.movie", ["movie" => $movies]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function insertMoviePage()
     {
-        return view("movie.view");
+        $categorias =  Categorias::all();
+
+        return view("movie.insert", ["categorias" => $categorias]);
     }
 
     /**
@@ -57,8 +61,8 @@ class MovieController extends Controller
 
         $filme = Movie::create($dados);
 
-        $generoIds = $request->input('generos');
-        $filme->generos()->sync($generoIds);
+        $generoIds = $request->input('categorias');
+        $filme->categorias()->sync($generoIds);
 
         return redirect()->route('movie')->with('sucesso', 'Filme adicionado com sucesso!');
     }
@@ -94,19 +98,19 @@ class MovieController extends Controller
         $filmesQuery = Movie::query();
 
         // Filtra os filme pelo gênero selecionado
-        $filmesQuery->whereHas('generos', function ($query) use ($nome) {
-            $query->where('generos.nome', $nome);
+        $filmesQuery->whereHas('categorias', function ($query) use ($nome) {
+            $query->where('categorias.nome', $nome);
         });
 
         $movies = $filmesQuery->get();
 
         // Carregar os gêneros para cada Filme encontrado
-        $movies->load('generos');
+        $movies->load('categorias');
 
-        $generoSelecionado = Categorias::where('nome', $nome)->first();
+        $categoriaselecionado = Categorias::where('nome', $nome)->first();
 
         // Carregar todos os gêneros
-        $generos = Categorias::all();
+        $categorias = Categorias::all();
 
         $filme = Movie::select('movie.id', 'movie.nome', DB::raw('GROUP_CONCAT(categorias.nome SEPARATOR ", ") AS categorias'))
             ->join('Filme_gens', 'filme.id', '=', 'Filme_gens.filme_id')
@@ -114,9 +118,9 @@ class MovieController extends Controller
             ->groupBy('filme.id', 'filme.nome')
             ->get();
 
-        $generoSelecionado = Movie::where('nome', $nome)->first();
+        $categoriaselecionado = Movie::where('nome', $nome)->first();
 
-        return view('genres.' . Str::slug($nome), compact('filme', 'generos', 'movies', 'generoSelecionado'));
+        return view('genres.' . Str::slug($nome), compact('filme', 'categorias', 'movies', 'categoriaselecionado'));
     }
     /**
      * Show the form for editing the specified resource.
@@ -124,6 +128,13 @@ class MovieController extends Controller
     public function edit(string $id)
     {
         return view('edit_movie.edit');
+    }
+
+    public function moviePage(string $id)
+    {
+        $movie = Movie::find($id);
+
+        return view('movie.view', ['movies' => $movie]);
     }
 
     /**
@@ -170,8 +181,8 @@ class MovieController extends Controller
         $movies->update($dados);
 
         // Atualize os gêneros associados ao Filme
-        $generoIds = $request->input('generos');
-        $movies->generos()->sync($generoIds);
+        $generoIds = $request->input('categorias');
+        $movies->categorias()->sync($generoIds);
 
         return redirect()->route('movie.view')->with('sucesso', 'Filme alterado com sucesso!');
     }
@@ -181,6 +192,10 @@ class MovieController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $deleted = DB::table('movies')
+            ->where('id', $id)
+            ->delete();
+
+        return  redirect()->route('home')->with('sucesso', 'Filme excluido com sucesso!');
     }
 }

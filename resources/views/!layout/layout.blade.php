@@ -37,7 +37,7 @@
             </div>
             <div class="col-lg-6 col-6 text-left">
 
-                <form action="{{ url('/') }}" method="POST">
+                <form action="{{ route('movie.searchName')}}" method="POST">
                 @csrf
                     <div class="input-group">
                         <input type="text" name="busca" class="form-control" placeholder="Buscar filme">
@@ -57,6 +57,7 @@
 
             @if (Auth::user() && Auth::user()->admin)
             <br> <a href="{{ route('movie') }}">Gerenciar filmes</a>
+            <br> <a href="{{ route('movie.insert') }}">Novo filme</a>
         @endif
         @else
 

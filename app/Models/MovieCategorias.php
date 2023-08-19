@@ -14,12 +14,12 @@ class MovieCategorias extends Model
     {
         return $this->belongsTo('App\Models\Movie');
     }
-    public function genero()
+    public function categorias()
     {
-        return $this->belongsTo('App\Models\Genero');
+        return $this->belongsTo('App\Models\Categorias');
     }
     protected $fillable = [
         'movie_id',
-        'genero_id',
+        'categorias_id',
     ];
 }

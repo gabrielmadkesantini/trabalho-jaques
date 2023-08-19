@@ -11,7 +11,7 @@ class Movie extends Model
     use HasFactory;
 
     protected $table = 'movies';
-
+    public $timestamps = false;
     protected $fillable = [
         'nome',
         'sinopse',
@@ -22,6 +22,6 @@ class Movie extends Model
 
     public function categorias()
     {
-        return $this->belongsToMany(Categoria::class, 'movie_categorias', 'movie_id', 'categorias_id');
+        return $this->belongsToMany(Categorias::class, 'movie_categorias', 'movie_id', 'categorias_id');
     }
 }
