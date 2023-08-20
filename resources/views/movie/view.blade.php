@@ -10,31 +10,46 @@
 </div>
 @endif
 
+@php
+    $caminhoImagem = public_path('storage/' . $movies->imagem);
+    $infoImagem = getimagesize($caminhoImagem);
+
+    $largura = $infoImagem[0]; // Índice 0 contém a largura
+    $altura = $infoImagem[1]; // Índice 1 contém a altura
+@endphp
 
     <div class="container">
         <div class="movie-info">
             <div class="movie-image">
                 @if($movies->imagem)
-                    <img src="{{ asset('storage\filme\g9XKfGC1JFBJXqTa0dAwZDtQ6MCVocErUHmn80VM.jpg') }}" alt="{{ $movies->nome }}" width="100">
-                @else
+                <div class='img-container'>
+                    <img src="{{ asset('storage/' . $movies->imagem) }}" alt="{{ $movies->nome }} width={{$largura - $largura*0.4}}" height={{$altura - $altura*0.4}}>
+                </div>
+                    @else
                     Sem imagem
                 @endif
+                <h1 style="margin-top:10px">{{ $movies->nome }}</h1>
+                <p> Lançado em {{ $movies->ano }}</p>
+                <a href="{{route('home')}}"><button>Voltar</button></a>
+
             </div>
             <div class="movie-details">
-                <h1>{{ $movies->nome }}</h1>
-                <p> {{ $movies->ano }}</p>
+
+                <iframe width="{{560 - 560*0.2}}" height="{{315 - 315*0.2}}" src="{{ $movies->link }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+               
                 <fieldset>
                     <legend>Sinopse:</legend>
                     {{ $movies->sinopse }}
                 </fieldset>
-                <p class="sinopse-spacing">Trailer: {{ $movies->link }}</p>
+                
                 <p>Gênero(s):
-                    @if ($movies->categorias->count() > 0)
-                        {{ $movies->categorias->pluck('nome')->implode(', ') }}
+                    @if ($categorias)
+                        {{ $categorias }}
                     @else
                         Nenhum gênero associado
                     @endif
                 </p>
+
             </div>
 
         </div>
@@ -53,9 +68,11 @@
         background-color: #fff;
     }
 
+    
     .container {
-        max-width: 800px;
-        margin: 0 auto;
+        display: flex;
+        margin: auto;
+        width: 800px;
         padding: 20px;
         background-color: #f0f0f0;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -72,6 +89,10 @@
     }
 
     .movie-details {
+        display: flex;
+        flex-direction: column;
+        width: 500px
+        flex-direction: column;
         flex: 1;
     }
 
@@ -85,10 +106,12 @@
     }
 
     img {
-        display: block;
-        margin-bottom: 10px;
-        max-width: 100%;
-        height: auto;
+        position: absolute; 
+    width: auto; 
+    height: 100%;
+    left: 50%; 
+    top: 50%;
+    transform: translate(-50%, -50%);
     }
 
     p {
@@ -110,6 +133,13 @@
     legend{
         margin-bottom: -10px;
     }
+
+.img-container {
+    width: 15vw; 
+    height: 40vh; 
+    overflow: hidden;
+    position: relative; 
+    border: 1px solid #ccc; }
 
     .add-button {
         display: inline-block;

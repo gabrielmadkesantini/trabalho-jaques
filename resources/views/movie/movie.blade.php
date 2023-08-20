@@ -6,18 +6,15 @@
     <title>Sua Página</title>
 </head>
 <body>
-
 <div class="container">
     @if (session('sucesso'))
     <div>{{ session('sucesso') }}</div>
     @endif
-
-    <form class="search-form" action="{{ route('movie.searchName') }}" method="POST">
+    <form class="search-form" action="{{ route('movie.search') }}" method="POST">
         @csrf
         <input class="search-input" type="text" name="busca" placeholder="Nome do filme">
         <button class="search-button" type="submit">Buscar</button>
     </form>
-
     <table>
         <tr>
             <th>Id</th>
@@ -28,7 +25,6 @@
             <th>Ano</th>
             <th colspan="2">Ações</th>
         </tr>
-
         @foreach ($movie as $movies)
         <tr>
             <td>{{ $movies->id }}</td>
@@ -42,10 +38,8 @@
         </tr>
         @endforeach
     </table>
-
     <a class="back-link" href="{{ route('home') }}">Voltar</a>
 </div>
-
 </body>
 </html>
 

@@ -55,7 +55,7 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-   public function register()
+    public function register()
     {
         return view('user.register');
     }
@@ -67,7 +67,7 @@ class UserController extends Controller
         $user = User::create($request->validate([
             "name" => 'required|min:3',
             "email" => 'required',
-            "password" =>'required|min:3'
+            "password" => 'required|min:3'
         ]));
         $user->password = Hash::make($request->password);
         $user->save();

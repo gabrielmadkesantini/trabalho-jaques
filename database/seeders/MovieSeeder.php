@@ -17,18 +17,18 @@ class MovieSeeder extends Seeder
     {
         DB::table('movies')->insert([
             [
-                'nome' => 'Filme A',
-                'sinopse' => 'Sinopse do Filme A',
-                'ano' => '2023-01-01',
-                'imagem' => 'imagem_a.jpg',
-                'link' => 'https://link.filmea.com',
+                'nome' => 'A menina que roubava livros',
+                'sinopse' => 'Alguma texto aqui',
+                'ano' => 2023,
+                'imagem' => 'https://2.bp.blogspot.com/-TOCRLYBV3N4/UsbbAXBZmkI/AAAAAAAAPuM/DbPHOcuv6HA/s1600/A-Menina-Que-Roubava-Livros-capa-filme-1.jpg',
+                'link' => 'https://www.youtube.com/embed/FzNrBC-tF7A',
             ],
             [
-                'nome' => 'Filme B',
-                'sinopse' => 'Sinopse do Filme B',
-                'ano' => '2023-02-01',
-                'imagem' => 'imagem_b.jpg',
-                'link' => 'https://link.filmeb.com',
+                'nome' => 'Carros 2',
+                'sinopse' => 'Alguma texto aqui',
+                'ano' => 2023,
+                'imagem' => 'https://upload.wikimedia.org/wikipedia/pt/7/7e/Carros_2_P%C3%B4ster.jpg',
+                'link' => 'https://www.youtube.com/embed/8M2NvKPW_VE',
             ],
         ]);
     }

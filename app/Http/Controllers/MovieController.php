@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Categorias;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Movie;
+use App\Models\MovieCategorias;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
@@ -24,6 +25,23 @@ class MovieController extends Controller
         $movies = Movie::all();
         // dd($movies);
         return view("movie.movie", ["movie" => $movies]);
+    }
+
+    public function filter(Request $request)
+    {
+        $nome = $request->input('name');
+        $ano = $request->input('ano');
+
+
+        $result = DB::table('movies')->where('nome', 'LIKE', '%' . $nome . '%')->where('ano', 'LIKE', '%' . $ano . '%')->get();
+
+        $otherResult = Movie::all();
+
+        if (!$result) {
+            return redirect()->route("home", ['movies' => $result]);
+        } else {
+            return redirect()->route("home", ['movies' => $otherResult]);
+        }
     }
 
     /**
@@ -122,24 +140,67 @@ class MovieController extends Controller
 
         return view('genres.' . Str::slug($nome), compact('filme', 'categorias', 'movies', 'categoriaselecionado'));
     }
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+
+    public function editPage(string $id)
     {
-        return view('edit_movie.edit');
+        $movie = Movie::find($id);
+        $categorias = Categorias::all();
+        return view('movie.edit', [
+            'movie' => $movie,
+            'categorias' => $categorias
+        ]);
+    }
+
+    public function edit(Request $request, string $id)
+    {
+        $filme = Movie::find($id);
+        if (!$filme) {
+            return redirect()->route('movie')->with('erro', 'Filme não encontrado!');
+        }
+        $dados = $request->validate([
+            'nome' => 'required|min:3',
+            'ano' => 'required',
+            'sinopse' => 'string|required',
+            'link' => 'string',
+            'imagem' => [
+                'image',
+                Rule::dimensions()->maxWidth(2048)->maxHeight(2048),
+                Rule::file()->max(2048),
+            ],
+        ]);
+        if ($request->hasFile('imagem')) {
+            $imagemPath = $request->file('imagem')->store('filme', 'public');
+            $dados['imagem'] = $imagemPath;
+        } else {
+            $dados['imagem'] = '';
+        }
+
+        $categorias = $request->input('categorias');
+
+        $filme->nome = $request->input('nome');
+        $filme->ano = $request->input('ano');
+        $filme->sinopse = $request->input('sinopse');
+        $filme->link = $request->input('link');
+        $filme->imagem = $dados['imagem'];
+        $filme->save();
+
+        $filme->categorias()->sync($categorias);
+
+        return redirect()->route('movie')->with('sucesso', 'Filme atualizado com sucesso!');
     }
 
     public function moviePage(string $id)
     {
         $movie = Movie::find($id);
+        $categorias = MovieCategorias::join('categorias', 'movie_categorias.categorias_id', '=', 'categorias.id')
+            ->where('movie_categorias.movie_id', $movie->id)
+            ->select('categorias.*')
+            ->get();
 
-        return view('movie.view', ['movies' => $movie]);
+
+        return view('movie.view', ['movies' => $movie, 'categorias' => $categorias[0]->name]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Movie $movies)
     {
         $rules = [

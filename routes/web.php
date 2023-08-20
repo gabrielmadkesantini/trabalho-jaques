@@ -25,28 +25,38 @@ use Illuminate\Support\Facades\DB;
 */
 
 Route::match(['get', 'post'], '/', function (Request $request) {
-
     $userId = null;
     if (Auth::check()) {
         $userId = $request->user()->id;
     }
 
+    $nome = $request->input('nome', '');
+    $ano = $request->input('ano', '');
 
 
+    $param = $request->input('categoria');
     $categorias = Categorias::all();
 
-    // Carregar os gêneros para cada filme encontrado
-    $movies = Movie::all();
+    if ($param && $nome && $ano) {
+        $movies = Movie::whereHas('categorias', function ($query) use ($param) {
+            $query->where('name', $param);
+        })->where('nome', 'LIKE', '%' . $nome . '%')->where('ano', 'LIKE', '%' . $ano . '%')->get();
+    } else if ($nome && $ano) {
+        $movies = Movie::where('nome', 'LIKE', '%' . $nome . '%')->where('ano', 'LIKE', '%' . $ano . '%')->get();
+    } else if ($nome) {
+        $movies = Movie::where('nome', 'LIKE', '%' . $nome . '%')->get();
+    } else if ($ano) {
+        $movies = Movie::where('nome', 'LIKE', '%' . $ano . '%')->get();
+    } else if ($param) {
+        $movies = Movie::whereHas('categorias', function ($query) use ($param) {
+            $query->where('name', $param);
+        })->get();
+    } else {
+        $movies = Movie::all();
+    }
 
 
-
-    // Definir $generoSelecionado como null
-    $generoSelecionado = null;
-
-    return view('welcome', compact('movies', 'categorias', 'generoSelecionado'))->with([
-        'movies' => $movies,
-        'categorias' => $categorias
-    ]);
+    return view('welcome', compact('movies', 'categorias', 'nome', 'ano'));
 })->name('home');
 
 Route::get('/genero/{name}', [MovieController::class, 'moviesPorGenero'])->name('movies.genero');
@@ -60,18 +70,17 @@ Route::get('/register', [UserController::class, 'register'])->name('register');
 Route::post('/register', [UserController::class, 'store'])->name('register.addSuccess');
 
 Route::get('/new-movie', [MovieController::class, 'movie'])->name('movie')->middleware('auth');
-Route::post('/new-movie', [MovieController::class, 'showByName'])->name('movie.searchName');
+Route::post('/new-movie', [MovieController::class, 'filter'])->name('movie.search');
 
 Route::get('/new-movie/movie/view', [MovieController::class, 'insertMoviePage'])->name('movie.insert')->middleware('auth');
 Route::post('/new-movie/movie/view', [MovieController::class, 'store'])->name('movie.viewTable');
 
 Route::get('/new-movie/movie/movie-page/{movies}', [MovieController::class, 'moviePage'])->name('movie.moviePage');
 
-Route::get('/new-movie/movie/edit/{movies}', [MovieController::class, 'editmovie'])->name('movie.edit')->middleware('auth');
-Route::post('/new-movie/movie/edit/{movies}', [MovieController::class, 'editSavemovie'])->name('movie.editSave');
+Route::get('/new-movie/movie/edit/{movies}', [MovieController::class, 'editPage'])->name('movie.edit')->middleware('auth');
+Route::post('/new-movie/movie/edit/{movies}', [MovieController::class, 'edit'])->name('movie.editSave');
 
 Route::get('/new-movie/movie/delete/{movie}', [MovieController::class, 'destroy'])->name('movie.delete')->middleware('auth');
-// Route::delete('/new-movie/movie/delete/{movie}', [MovieController::class, 'deletemovie'])->name('movie.deleteConfirm')->middleware('auth');
 
 Route::get('/new-movie/genre', [MovieController::class, 'genre'])->name('genre')->middleware('auth');
 Route::post('/new-movie/genre', [MovieController::class, 'newGenre'])->name('genre.newGenre');
